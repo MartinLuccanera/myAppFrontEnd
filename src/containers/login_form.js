@@ -12,7 +12,7 @@ class LoginForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {term: ''};
+        this.state = {username: '', password: ''};
         /* By doing this, we are saying that 'this' (our instance of loginForm) has a function called onInputChange
          * bind that function to 'this' and then replace onInputChange with this new bound instance of this function
          * (Override the local method with the new method that has 'this' bind).
@@ -27,8 +27,9 @@ class LoginForm extends Component {
     /* All DOM eventHandlers like onClick come along with 'event' object (Vanilla JS). */
 
     onInputChange(event) {
-        console.log(event.target.value);
-        this.setState({term: event.target.value});
+        //console.log(event.target);
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
     }
 
     /**
@@ -40,8 +41,7 @@ class LoginForm extends Component {
      */
     onFormSubmit(event) {
         event.preventDefault();
-
-        //We go and fetch weather data.
+        //Now we attempt to login.
         this.props.login(this.state.username, this.state.password);
         //this.setState({password: ''}); //-> clear search form.
     }
@@ -57,7 +57,9 @@ class LoginForm extends Component {
                             className="input-group"
                             hintText="Enter your Username"
                             floatingLabelText="Username"
-                            onChange={(event, newValue) => this.setState({username: newValue})}
+                            name="username"
+                            value={this.state.username}
+                            onChange={this.onInputChange}
                         />
                         <br/>
                         <TextField
@@ -65,7 +67,9 @@ class LoginForm extends Component {
                             type="password"
                             hintText="Enter your Password"
                             floatingLabelText="Password"
-                            onChange={(event, newValue2) => this.setState({password: newValue2})}
+                            name="password"
+                            value={this.state.password}
+                            onChange={this.onInputChange}
                         />
                         <br/>
                         <RaisedButton
