@@ -1,15 +1,28 @@
 import axios from 'axios';
 
-const API_URL = '';
-const API_LOGIN_ENDPOINT = '';
+const API_URL = 'http://localhost:8080/oauth';
+const API_LOGIN_ENDPOINT = 'token';
 
 export const EVENT_LOGIN = 'EVENT_LOGIN';
 
 export function login(user, pass) {
 
-    const url = `${API_URL}/${API_LOGIN_ENDPOINT}`; //falta agregar user y pass
+    /*
+    ?grant_type=password&username=admin&password=admin1234&client_id=spring-security-oauth2-read-write-client
+     */
+    const url = `${API_URL}/${API_LOGIN_ENDPOINT}?grant_type=password&username=${user}&password=${pass}&client_id=spring-security-oauth2-read-write-client`;
+    console.log('url: ' + url);
+    console.log('user: ' + user);
+    console.log('pass: ' + pass);
 
-    const request = axios.get(url);
+    const request = axios.post(
+        url, {}, {
+            headers: {
+                Authorization: "Basic c3ByaW5nLXNlY3VyaXR5LW9hdXRoMi1yZWFkLXdyaXRlLWNsaWVudDpzcHJpbmctc2VjdXJpdHktb2F1dGgyLXJlYWQtd3JpdGUtY2xpZW50LXBhc3N3b3JkMTIzNA=="
+            }
+        }
+    );
+    console.log(request);
 
     return {
         type: EVENT_LOGIN,
