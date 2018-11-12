@@ -19,25 +19,26 @@ class LoginForm extends Component {
          */
         this.onInputChange = this.onInputChange.bind(this);
 
-        //Remember to bind the context or else 'this' won't be what we expect it to be
+        //Remember to bind the context or else 'this' won't be what we expect it to be.
         this.onFormSubmit = this.onFormSubmit.bind(this);
     }
 
     onInputChange(event) {
-        //console.log(event.target);
         const { name, value } = event.target;
         this.setState({ [name]: value });
     }
 
     /**
-     * This is a callback.
+     * <p>Submits username and password for authentication attempt.</p>
+     *
      * @param event
      */
     onFormSubmit(event) {
+        //This is a callback (reason why we have to bind the context above).
         //Now we attempt to login.
         this.props.fetchLogin(this.state.username, this.state.password);
         //We can empty the password field by
-        //this.setState({ password: '' });
+        this.setState({ password: '' });
     }
 
     render() {
@@ -67,9 +68,9 @@ class LoginForm extends Component {
                         />
                         <br/>
                         <RaisedButton
+                            className="raised-button"
                             label="Submit"
                             primary={true}
-                            style={style}
                             onClick={
                                 (event) => this.onFormSubmit(event)
                             }
@@ -80,10 +81,6 @@ class LoginForm extends Component {
         );
     }
 }
-
-const style = {
-    margin: 15,
-};
 
 /**
  * <p>This causes the action creator (whenever it gets called and returns an action) binds
@@ -100,6 +97,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 //The only reason why we are passing null here is that whenever we are passing a function, that is supposed to map
-// our dispatch to the props of our container, it always goes in as the second argument. That is why we pass null as the first.
-// We are saying that we don't need the state.
+// our dispatch to the props of our container, it always goes in as the second argument.
+// That is why we pass null as the first. We are saying that we don't need the state.
 export default connect(null, mapDispatchToProps)(LoginForm);

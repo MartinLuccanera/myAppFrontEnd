@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 
 class LoginList extends Component {
 
+    /**
+     * <p>Resolves the promise that I brought from the reducer.</p>
+     *
+     * @param pro
+     */
     renderLogin(pro) {
         pro.then(results => {
             console.log('results.data', results.data);

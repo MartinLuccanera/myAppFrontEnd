@@ -5,6 +5,13 @@ const API_LOGIN_ENDPOINT = 'token';
 
 export const EVENT_LOGIN = 'EVENT_LOGIN';
 
+/**
+ * <p>Hits the corresponding endpoint located at {@API_URL @API_LOGIN_ENDPOINT} with provided username and password.</p>
+ *
+ * @param user
+ * @param pass
+ * @returns {{type: string[event], username: *, payload: AxiosPromise<any>}}
+ */
 export function fetchLogin(user, pass) {
 
     /*
@@ -18,6 +25,7 @@ export function fetchLogin(user, pass) {
             }
         }
     );
+
     return {
         type: EVENT_LOGIN,
         username: user,
