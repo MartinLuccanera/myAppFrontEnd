@@ -5,16 +5,12 @@ const API_LOGIN_ENDPOINT = 'token';
 
 export const EVENT_LOGIN = 'EVENT_LOGIN';
 
-export function login(user, pass) {
+export function fetchLogin(user, pass) {
 
     /*
     ?grant_type=password&username=admin&password=admin1234&client_id=spring-security-oauth2-read-write-client
      */
     const url = `${API_URL}/${API_LOGIN_ENDPOINT}?grant_type=password&username=${user}&password=${pass}&client_id=spring-security-oauth2-read-write-client`;
-    console.log('url: ' + url);
-    console.log('user: ' + user);
-    console.log('pass: ' + pass);
-
     const request = axios.post(
         url, {}, {
             headers: {
@@ -22,8 +18,6 @@ export function login(user, pass) {
             }
         }
     );
-    console.log(request);
-
     return {
         type: EVENT_LOGIN,
         payload: request

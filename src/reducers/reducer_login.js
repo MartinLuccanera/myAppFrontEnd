@@ -1,6 +1,6 @@
 import { EVENT_LOGIN } from '../actions/index';
 
-export default function(state = [], action) {
+export default function(state = null, action) {
     /* When reaching this part of the code, the request will no longer be a promise but the result of the AJAX request
      * to the API. It will contain the data that was returned by the server.
      * Remember that middlewares (like redux promise) have the ability to stop or manipulate actions before they hit
@@ -12,13 +12,12 @@ export default function(state = [], action) {
     console.log('action type: ' + action.type);
     switch (action.type) {
         case EVENT_LOGIN:
-            //We need to return the new state with the sum of all the city the user has searched for + the new search.
-            //return state.concat([action.payload.data]);
-            console.log("action.payload");
-            console.log(action.payload);
-            return [ action.payload.data, ...state ];//ES6 version of the former line. Returns an array concatenated
-                                                     //with the new element. DO NOT MUTATE STATE neither by 
-                                                     //(state = new state) nor by state.push
+
+            return action.payload/*.then(results => {
+                console.log('results.data', results.data);
+                //state.setState(results.data);
+                return results.data
+            });*/
     }
     return state;
 }
