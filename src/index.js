@@ -2,14 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import App from './components/app';
+import NeedLogin from './components/need_login';
 import reducers from './reducers';
+import SuccessfulLogin from './components/successful_login';
 
 const createStoreWithMiddleware = applyMiddleware()(createStore);
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App />
-  </Provider>
-  , document.querySelector('.container'));
+    <Provider store={createStoreWithMiddleware(reducers)}>
+        <Router>
+            <div>
+                <Route exact path="/" component={App}/>
+                <Route path="/need_login" component={NeedLogin}/>
+                <Route path="/success" component={SuccessfulLogin}/>
+            </div>
+        </Router>
+    </Provider>,
+    document.querySelector('.container')
+);

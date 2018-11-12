@@ -1,7 +1,11 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Route, Redirect} from 'react-router'
 
 class LoginList extends Component {
+    state = {
+        redirectToReferrer: false
+    };
 
     /**
      * <p>Resolves the promise that I brought from the reducer.</p>
@@ -9,21 +13,35 @@ class LoginList extends Component {
      * @param pro
      */
     renderLogin(pro) {
-        pro.then(results => {
-            console.log('results.data', results.data);
-            return results.data
+        pro.then(result => {
+            console.log('result.data', result.data);
+            this.setState({redirectToReferrer: true})
+        }).catch(result => {
+            console.log('result', result.toString());
+            this.setState({redirectToReferrer: false})
         });
     }
 
     render() {
         if (!this.props.login) {
-            return <div>Select a book to get started.</div>
+            return <div> </div>
         }
-        return (
-            <div>
-                Login: {this.renderLogin(this.props.login.payload)} Logged in as {this.props.login.username}
-            </div>
-        );
+        this.renderLogin(this.props.login.payload);
+
+        const {redirectToReferrer} = this.state;
+
+        if (redirectToReferrer) {
+            return (
+                <Route exact path="/" render={() => (
+                    <Redirect to="/success"/>
+                )}/>
+            );
+        } else {
+            //TODO: si cae aca explota todo!!!!, queda tirando intentos de login en bucle. seguro tiene q ver con state.
+            return (
+                <div> Failed to login. </div>
+            );
+        }
     }
 }
 
