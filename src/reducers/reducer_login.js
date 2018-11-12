@@ -13,11 +13,10 @@ export default function(state = null, action) {
     switch (action.type) {
         case EVENT_LOGIN:
 
-            return action.payload/*.then(results => {
-                console.log('results.data', results.data);
-                //state.setState(results.data);
-                return results.data
-            });*/
+            return {
+                payload: action.payload,
+                username: action.username
+            }
     }
     return state;
 }

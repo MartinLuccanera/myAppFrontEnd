@@ -1,27 +1,22 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class LoginList extends Component {
 
     renderLogin(pro) {
         pro.then(results => {
             console.log('results.data', results.data);
-            //state.setState(results.data);
             return results.data
         });
     }
 
     render() {
-        console.log('got here');
-        console.log('this.props', this.props);
-        console.log('this.props.login', this.props.login);
-        if (!this.props.login_) {
-            //If book is null (at boot-up time there is no selected book).
+        if (!this.props.login) {
             return <div>Select a book to get started.</div>
         }
         return (
             <div>
-                Login: {this.renderLogin(this.props.login_)}
+                Login: {this.renderLogin(this.props.login.payload)} Logged in as {this.props.login.username}
             </div>
         );
     }
@@ -37,14 +32,9 @@ function
 
 mapStateToProps(state) {
     return {
-        login_: state.login
+        login: state.login
     };
 }
 
 //We are exporting the connected version of LoginList (for state's sake).
-export default connect(mapStateToProps)
-
-(
-    LoginList
-)
-;
+export default connect(mapStateToProps)(LoginList);

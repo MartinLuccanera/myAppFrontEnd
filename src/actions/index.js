@@ -20,6 +20,7 @@ export function fetchLogin(user, pass) {
     );
     return {
         type: EVENT_LOGIN,
+        username: user,
         payload: request
     };
 }
