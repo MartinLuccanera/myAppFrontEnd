@@ -4,6 +4,7 @@ const API_URL = 'http://localhost:8080/oauth';
 const API_LOGIN_ENDPOINT = 'token';
 
 export const EVENT_LOGIN = 'EVENT_LOGIN';
+export const EVENT_LOGGED_IN = 'EVENT_LOGGED_IN';
 
 /**
  * <p>Hits the corresponding endpoint located at {@API_URL @API_LOGIN_ENDPOINT} with provided username and password.</p>

@@ -6,7 +6,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import App from './components/app';
 import NeedLogin from './components/need_login';
 import reducers from './reducers';
-import SuccessfulLogin from './components/successful_login';
+import Hub from './containers/hub';
 
 const createStoreWithMiddleware = applyMiddleware()(createStore);
 
@@ -16,7 +16,7 @@ ReactDOM.render(
             <div>
                 <Route exact path="/" component={App}/>
                 <Route path="/need_login" component={NeedLogin}/>
-                <Route path="/success" component={SuccessfulLogin}/>
+                <Route path="/hub" component={Hub}/>
             </div>
         </Router>
     </Provider>,

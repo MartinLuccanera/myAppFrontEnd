@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Route, Redirect} from 'react-router'
+import {bindActionCreators} from "redux";
+import {hubAction} from "../actions/hub_action";
 
-class LoginList extends Component {
+export class LoginList extends Component {
     message = 'Failed to login';
     constructor(props){
         super(props);
@@ -18,14 +20,20 @@ class LoginList extends Component {
      */
     renderLogin(pro) {
         pro.then(result => {
-            console.log('result.data', result.data);
             this.message = '';
             this.setState({
-                isLoginSuccessful: true
+                isLoginSuccessful: true,
+                result: result
+            });
+
+            console.log('this.state.result: ', this.state.result);
+            this.props.hubAction({
+                access_token: this.state.result.data.access_token,
+                refresh_token: this.state.result.data.refresh_token,
+                username: this.props.login.username
             });
         }).catch(result => {
             this.message = 'Failed to login';
-            console.log('result', result.toString());
             //If I set state to something else, the component will re-render and the app will loop out of control.
         });
     }
@@ -36,11 +44,9 @@ class LoginList extends Component {
         }
 
         if (this.state.isLoginSuccessful) {
-            console.log('this.props: ', this.props);
-            console.log('Logged in');
             return (
                 <Route exact path="/" render={() => (
-                    <Redirect to="/success"/>
+                    <Redirect to="/hub"/>
                 )}/>
             );
         } else {
@@ -58,13 +64,15 @@ class LoginList extends Component {
  * @param state
  * @returns {{login: *|Function}}
  */
-function
-
-mapStateToProps(state) {
+function mapStateToProps(state) {
     return {
         login: state.login
     };
 }
 
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ hubAction }, dispatch);
+}
+
 //We are exporting the connected version of LoginList (for state's sake).
-export default connect(mapStateToProps)(LoginList);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginList);
