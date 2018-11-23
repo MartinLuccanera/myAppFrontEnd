@@ -10,18 +10,20 @@ import {EVENT_LOGGED_IN} from "../actions";
  * @returns {*}
  */
 export default function(state = null, action) {
-    console.log('reducer_login - action type: ' + action.type);
     switch (action.type) {
+        //Login attempt.
         case EVENT_LOGIN:
             return {
                 payload: action.payload,
                 username: action.username,
             };
+        //Login was successful.
         case EVENT_LOGGED_IN:
             return {
                 payload: action.payload,
                 username: action.username
             }
     }
+    //Default response (redux stuff).
     return state;
 }

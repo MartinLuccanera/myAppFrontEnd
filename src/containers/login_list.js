@@ -6,6 +6,7 @@ import {hubAction} from "../actions/hub_action";
 
 export class LoginList extends Component {
     message = 'Failed to login';
+    //React stuff
     constructor(props){
         super(props);
         this.state = {
@@ -21,12 +22,13 @@ export class LoginList extends Component {
     renderLogin(pro) {
         pro.then(result => {
             this.message = '';
+            //Once async request finishes, alter React's state for page to re-render.
             this.setState({
                 isLoginSuccessful: true,
                 result: result
             });
 
-            console.log('login_list - this.state.result: ', this.state.result);
+            //Store async call result to be used in other parts of the app.
             this.props.hubAction({
                 access_token: this.state.result.data.access_token,
                 refresh_token: this.state.result.data.refresh_token,
@@ -39,13 +41,13 @@ export class LoginList extends Component {
     }
 
     render() {
+        //First render, show nothing.
         if (!this.props.login) {
             return <div> </div>
         }
 
-        console.log('login_list - this.state.isLoginSuccessful: ', this.state.isLoginSuccessful);
+        //If login is successful, go on.
         if (this.state.isLoginSuccessful) {
-            console.log('login_list - returning.');
             return (
                 <Route exact path="/" render={() => (
                     <Redirect to="/hub"/>

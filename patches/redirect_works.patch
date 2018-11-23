@@ -1,0 +1,187 @@
+Index: src/actions/hub_action.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/actions/hub_action.js	(date 1542853864000)
++++ src/actions/hub_action.js	(date 1542930254519)
+@@ -2,8 +2,8 @@
+ 
+ export function hubAction(state) {
+ 
+-    console.log('Im at hubAction.');
+-    console.log('Payload: ', state);
++    console.log('hub_action - Im at hubAction.');
++    console.log('hub_action - Payload: ', state);
+     return {
+         type: EVENT_LOGGED_IN,
+         payload: state
+Index: src/containers/hub.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/containers/hub.js	(date 1542853864000)
++++ src/containers/hub.js	(date 1542933383285)
+@@ -1,39 +1,70 @@
+-import React, { Component } from 'react';
+-import { connect } from 'react-redux';
++import React, {Component} from 'react';
++import {connect} from 'react-redux';
+ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+ import RaisedButton from 'material-ui/RaisedButton';
++import {Route, Redirect} from 'react-router';
+ 
+ export class Hub extends Component {
+ 
+-    constructor(props){
++    constructor(props) {
+         super(props);
++        this.handleReLogin = this.handleReLogin.bind(this);
++        this.state = { needLogin: false }
+     }
+ 
+     render() {
+-        console.log('this.props.state: ', this.props.state);
++        console.log('hub - this.props: ', this.props);
++        console.log('this.state.needRedirect: ', this.state.needRedirect);
++        if (this.state.needRedirect) {
++            return (
++                <Route exact path="/hub" render={() => (
++                    <Redirect to="/"/>
++                )}/>
++            );
++        }
+         //This needs to be protected with login
+         //token has to be valid
+-        return (
+-            <div>
+-                <MuiThemeProvider>
+-                    <div>
+-                        <RaisedButton
+-                            className="raised-button"
+-                            label="Profile"
+-                            primary={true}
+-                            onClick={
+-                                (event) => this.handleClick(event)
+-                            }
+-                        />
+-                    </div>
+-                </MuiThemeProvider>
+-            </div>
+-        );
++        if (this.props.state.login && this.props.state.login.payload && this.props.state.login.payload.access_token) {
++            return (
++                <div>
++                    <MuiThemeProvider>
++                        <div>
++                            <RaisedButton
++                                className="raised-button"
++                                label="Profile"
++                                primary={true}
++                                onClick={this.handleClick}
++                            />
++                        </div>
++                    </MuiThemeProvider>
++                </div>
++            )
++        } else {
++            return (
++                <div>
++                    You need to login to access this page.
++                    <MuiThemeProvider>
++                        <div>
++                            <RaisedButton
++                                className="raised-button"
++                                label="Login"
++                                primary={true}
++                                onClick={this.handleReLogin}
++                            />
++                        </div>
++                    </MuiThemeProvider>
++                </div>
++            )
++        }
+     }
+ 
+-    handleClick(event){
++    handleClick() {
+         //redirect to profile page
+     }
++
++    handleReLogin() {
++        this.setState({needRedirect: true});
++    }
+ }
+ 
+ function mapStateToProps(state) {
+Index: src/containers/login_list.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/containers/login_list.js	(date 1542853864000)
++++ src/containers/login_list.js	(date 1542931987953)
+@@ -26,7 +26,7 @@
+                 result: result
+             });
+ 
+-            console.log('this.state.result: ', this.state.result);
++            console.log('login_list - this.state.result: ', this.state.result);
+             this.props.hubAction({
+                 access_token: this.state.result.data.access_token,
+                 refresh_token: this.state.result.data.refresh_token,
+@@ -43,7 +43,9 @@
+             return <div> </div>
+         }
+ 
++        console.log('login_list - this.state.isLoginSuccessful: ', this.state.isLoginSuccessful);
+         if (this.state.isLoginSuccessful) {
++            console.log('login_list - returning.');
+             return (
+                 <Route exact path="/" render={() => (
+                     <Redirect to="/hub"/>
+Index: src/reducers/reducer_login.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/reducers/reducer_login.js	(date 1542853864000)
++++ src/reducers/reducer_login.js	(date 1542931950054)
+@@ -1,4 +1,5 @@
+ import { EVENT_LOGIN } from '../actions/index';
++import {EVENT_LOGGED_IN} from "../actions";
+ 
+ /**
+  * <p>Assemble the response from the authentication server into a JSON containing the payload (a promise) and the username
+@@ -9,9 +10,14 @@
+  * @returns {*}
+  */
+ export default function(state = null, action) {
+-    console.log('action type: ' + action.type);
++    console.log('reducer_login - action type: ' + action.type);
+     switch (action.type) {
+         case EVENT_LOGIN:
++            return {
++                payload: action.payload,
++                username: action.username,
++            };
++        case EVENT_LOGGED_IN:
+             return {
+                 payload: action.payload,
+                 username: action.username
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- README.md	(date 1542853864000)
++++ README.md	(date 1542931239962)
+@@ -37,3 +37,7 @@
+ 
+ Click [here](https://medium.com/technoetics/create-basic-login-forms-using-create-react-app-module-in-reactjs-511b9790dede)
+ 
++#### Helpful links
++
++[1](https://daveceddia.com/how-does-redux-work/)
++[2](https://medium.freecodecamp.org/understanding-redux-the-worlds-easiest-guide-to-beginning-redux-c695f45546f6)

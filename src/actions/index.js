@@ -7,7 +7,7 @@ export const EVENT_LOGIN = 'EVENT_LOGIN';
 export const EVENT_LOGGED_IN = 'EVENT_LOGGED_IN';
 
 /**
- * <p>Hits the corresponding endpoint located at {@API_URL @API_LOGIN_ENDPOINT} with provided username and password.</p>
+ * <p>Hits the corresponding endpoint located at {@link API_URL @link API_LOGIN_ENDPOINT} with provided username and password.</p>
  *
  * @param user
  * @param pass
@@ -19,6 +19,7 @@ export function fetchLogin(user, pass) {
     ?grant_type=password&username=admin&password=admin1234&client_id=spring-security-oauth2-read-write-client
      */
     const url = `${API_URL}/${API_LOGIN_ENDPOINT}?grant_type=password&username=${user}&password=${pass}&client_id=spring-security-oauth2-read-write-client`;
+    //performs async request for auth data.
     const request = axios.post(
         url, {}, {
             headers: {

@@ -6,25 +6,33 @@ import {Route, Redirect} from 'react-router';
 
 export class Hub extends Component {
 
+    /**
+     * React stuff.
+     * @param props
+     */
     constructor(props) {
         super(props);
         this.handleReLogin = this.handleReLogin.bind(this);
         this.state = { needLogin: false }
     }
 
+    /**
+     * Here be thy magic.
+     * @returns {*}
+     */
     render() {
-        console.log('hub - this.props: ', this.props);
-        console.log('this.state.needRedirect: ', this.state.needRedirect);
         if (this.state.needRedirect) {
+            //If you are not logged in, you are redirected to login page (AKA /).
             return (
                 <Route exact path="/hub" render={() => (
                     <Redirect to="/"/>
                 )}/>
             );
         }
-        //This needs to be protected with login
-        //token has to be valid
+        //TODO: token has to be valid
         if (this.props.state.login && this.props.state.login.payload && this.props.state.login.payload.access_token) {
+            //TODO: Show a spinner until inner state has received confirmation from valid token AND finished receiving
+            //TODO: JSON from backend with user data.
             return (
                 <div>
                     <MuiThemeProvider>
@@ -58,22 +66,30 @@ export class Hub extends Component {
         }
     }
 
+    /**
+     * <p>If you are logged in, you are shown your profile.</p>
+     */
     handleClick() {
-        //redirect to profile page
+        //TODO: redirect to profile page
     }
 
+    /**
+     * <p>If you are not logged in, state is updated and login-redirect-button is shown.</p>
+     */
     handleReLogin() {
         this.setState({needRedirect: true});
     }
 }
 
+/**
+ * Redux stuff.
+ * @param state
+ * @returns {{state: *}}
+ */
 function mapStateToProps(state) {
     return {
         state: state
     };
 }
 
-//The only reason why we are passing null here is that whenever we are passing a function, that is supposed to map
-// our dispatch to the props of our container, it always goes in as the second argument.
-// That is why we pass null as the first. We are saying that we don't need the state.
 export default connect(mapStateToProps)(Hub);

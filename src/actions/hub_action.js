@@ -1,9 +1,12 @@
 import {EVENT_LOGGED_IN} from "./index";
 
+/**
+ * <p>Dispatches action of type {@link EVENT_LOGGED_IN} meaning user has completed the process of logging in.</p>
+ *
+ * @param state
+ * @returns {{type, payload: *}}
+ */
 export function hubAction(state) {
-
-    console.log('hub_action - Im at hubAction.');
-    console.log('hub_action - Payload: ', state);
     return {
         type: EVENT_LOGGED_IN,
         payload: state
