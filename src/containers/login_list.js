@@ -26,7 +26,7 @@ export class LoginList extends Component {
                 result: result
             });
 
-            console.log('this.state.result: ', this.state.result);
+            console.log('login_list - this.state.result: ', this.state.result);
             this.props.hubAction({
                 access_token: this.state.result.data.access_token,
                 refresh_token: this.state.result.data.refresh_token,
@@ -43,7 +43,9 @@ export class LoginList extends Component {
             return <div> </div>
         }
 
+        console.log('login_list - this.state.isLoginSuccessful: ', this.state.isLoginSuccessful);
         if (this.state.isLoginSuccessful) {
+            console.log('login_list - returning.');
             return (
                 <Route exact path="/" render={() => (
                     <Redirect to="/hub"/>

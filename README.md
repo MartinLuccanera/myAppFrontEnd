@@ -37,3 +37,7 @@ Click [original template](https://github.com/StephenGrider/ReactStarter/releases
 
 Click [here](https://medium.com/technoetics/create-basic-login-forms-using-create-react-app-module-in-reactjs-511b9790dede)
 
+#### Helpful links
+
+[1](https://daveceddia.com/how-does-redux-work/)
+[2](https://medium.freecodecamp.org/understanding-redux-the-worlds-easiest-guide-to-beginning-redux-c695f45546f6)
