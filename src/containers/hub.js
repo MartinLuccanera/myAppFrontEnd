@@ -5,6 +5,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Route, Redirect} from 'react-router';
 import axios from "axios/index";
 import {TextField} from "material-ui";
+import {bindActionCreators} from "redux";
+import {profileEditAction} from "../actions/profile_edit_action";
 
 export const ENDPOINT_URL = 'http://localhost:8080/secured/user/profile';
 
@@ -18,7 +20,6 @@ export class Hub extends Component {
         super(props);
         this.handleReLogin = this.handleReLogin.bind(this);
         this.renderProfilePage = this.renderProfilePage.bind(this);
-        this.onInputChange = this.onInputChange.bind(this);
         this.redirectToEditProfile = this.redirectToEditProfile.bind(this);
         this.state = {needLogin: false}
     }
@@ -28,6 +29,14 @@ export class Hub extends Component {
             //Once async request finishes, alter React's state for page to re-render.
             this.setState({
                 message: result
+            });
+
+            this.props.profileEditAction({
+                birthdate: this.state.message.data.birthdate,
+                name: this.state.message.data.name,
+                username: this.state.message.data.username,
+                bio: this.state.message.data.bio,
+                email: this.state.message.data.email
             });
         }).catch(result => {
             //If I set state to something else, the component will re-render and the app will loop out of control.
@@ -59,12 +68,9 @@ export class Hub extends Component {
             //TODO: Show a spinner until inner state has received confirmation from valid token AND finished receiving
             //TODO: JSON from backend with user data.
             if (!this.state.message) {
-                console.log('No message.');
                 this.fetchProfile(this.props.state.login.payload.username, this.props.state.login.payload.access_token);
                 return null;
             }
-            console.log('Yes message.');
-            console.log('this.state.message.data: ', this.state.message.data);
             //const items = this.state.message.data.map((d,i) => <li>{d[i].name}</li>);
             return (
                 <div>
@@ -72,33 +78,28 @@ export class Hub extends Component {
                         <div>
                             <TextField
                                 name="id"
-                                floatingLabelText="id"
-                                value={this.state.message.data.id}
-                                onChange={this.onInputChange}
+                                floatingLabelText="Date of birth"
+                                value={this.state.message.data.birthdate}
                             /><br/>
                             <TextField
                                 name="name"
                                 floatingLabelText="name"
                                 value={this.state.message.data.name}
-                                onChange={this.onInputChange}
                             /><br/>
                             <TextField
                                 name="username"
                                 floatingLabelText="username"
                                 value={this.state.message.data.username}
-                                onChange={this.onInputChange}
                             /><br/>
                             <TextField
                                 name="bio"
                                 floatingLabelText="bio"
                                 value={this.state.message.data.bio}
-                                onChange={this.onInputChange}
                             /><br/>
                             <TextField
                                 name="email"
                                 floatingLabelText="email"
                                 value={this.state.message.data.email}
-                                onChange={this.onInputChange}
                             /><br/>
                             <RaisedButton
                                 className="raised-button"
@@ -114,7 +115,6 @@ export class Hub extends Component {
             )
 
         } else {
-            console.log('No state, no token.');
             return (
                 <div>
                     You need to login to access this page.
@@ -138,7 +138,6 @@ export class Hub extends Component {
      */
     redirectToEditProfile() {
         this.setState({redirect: true});
-        console.log('Im here.');
     }
 
     /**
@@ -160,11 +159,6 @@ export class Hub extends Component {
         );
         this.renderProfilePage(request);
     }
-
-    onInputChange(event) {
-        const {name, value} = event.target;
-        this.setState({[name]: value});
-    }
 }
 
 /**
@@ -178,4 +172,9 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Hub);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ profileEditAction }, dispatch);
+}
+
+//We are exporting the connected version of LoginList (for state's sake).
+export default connect(mapStateToProps, mapDispatchToProps)(Hub);

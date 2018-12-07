@@ -5,6 +5,7 @@ const API_LOGIN_ENDPOINT = 'token';
 
 export const EVENT_LOGIN = 'EVENT_LOGIN';
 export const EVENT_LOGGED_IN = 'EVENT_LOGGED_IN';
+export const EVENT_EDIT_PROFILE = 'EVENT_EDIT_PROFILE';
 
 /**
  * <p>Hits the corresponding endpoint located at {@link API_URL @link API_LOGIN_ENDPOINT} with provided username and password.</p>
