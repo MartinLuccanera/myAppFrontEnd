@@ -6,6 +6,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import App from './components/app';
 import reducers from './reducers';
 import Hub from './containers/hub';
+import ProfileEdit from './containers/profile_edit';
 
 const createStoreWithMiddleware = applyMiddleware()(createStore);
 
@@ -17,6 +18,7 @@ ReactDOM.render(
             <div>
                 <Route exact path="/" component={App}/>
                 <Route path="/hub" component={Hub}/>
+                <Route path="/profile-edit" component={ProfileEdit}/>
             </div>
         </Router>
     </Provider>,

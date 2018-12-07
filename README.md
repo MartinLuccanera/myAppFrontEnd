@@ -26,7 +26,13 @@ If you want to check the final version of my project:
 ```
 
 #### Not Familiar with Git?
-Click [original template](https://github.com/StephenGrider/ReactStarter/releases) or [my project](https://github.com/MartinLuccanera/ReactStarter/releases) and then download the .zip file. Extract the contents of the zip file, then open your terminal, change to the project directory, and:
+Click [original template](https://github.com/StephenGrider/ReactStarter/releases) or 
+[my project](https://github.com/MartinLuccanera/ReactStarter/releases) and then download the .zip file. 
+Extract the contents of the zip file, then open your terminal, change to the project directory, and:
+
+Current project is being developed at
+[FrontEnd](https://github.com/MartinLuccanera/myAppFrontEnd)
+[BackEnd](https://github.com/MartinLuccanera/myAppBackEnd)
 
 ```
 > npm install
@@ -41,3 +47,5 @@ Click [here](https://medium.com/technoetics/create-basic-login-forms-using-creat
 
 [1](https://daveceddia.com/how-does-redux-work/)
 [2](https://medium.freecodecamp.org/understanding-redux-the-worlds-easiest-guide-to-beginning-redux-c695f45546f6)
+[Material-UI](https://material-ui.com/)
+[Material-UI - TextFields used](https://material-ui.com/demos/text-fields/)
