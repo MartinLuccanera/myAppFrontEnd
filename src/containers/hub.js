@@ -7,11 +7,11 @@ import axios from "axios/index";
 import {TextField} from "material-ui";
 import {bindActionCreators} from "redux";
 import {profileEditAction} from "../actions/profile_edit_action";
+import img from '../../resources/images/giphy.gif'
 
 export const ENDPOINT_URL = 'http://localhost:8080/secured/user/profile';
 
 export class Hub extends Component {
-//TODO: Cuando hago click en editar el perfil, mandar todo a profile/edit y manejar los cambios de los inputs ahi.
     /**
      * React stuff.
      * @param props
@@ -31,6 +31,14 @@ export class Hub extends Component {
                 message: result
             });
 
+            /*
+            By storing this here we are telling redux which data we want to pass along.
+            In this case, we want this data to go to profileEditAction which is an action.
+            Then, this action is fired with a type associated to it. All reducers get this action
+            but only reducer_profile_edit handles it because it catches actions of type EVENT_EDIT_PROFILE.
+            Which in turn, passes the data over to profile_edit via
+            return bindActionCreators({ profileEditAction }, dispatch);
+             */
             this.props.profileEditAction({
                 birthdate: this.state.message.data.birthdate,
                 name: this.state.message.data.name,
@@ -41,6 +49,11 @@ export class Hub extends Component {
         }).catch(result => {
             //If I set state to something else, the component will re-render and the app will loop out of control.
         });
+        return(
+            <div>
+                <img src={img} />
+            </div>
+        );
     }
 
     /**
@@ -65,8 +78,6 @@ export class Hub extends Component {
         }
         //TODO: token has to be valid
         if (this.props.state.login && this.props.state.login.payload && this.props.state.login.payload.access_token) {
-            //TODO: Show a spinner until inner state has received confirmation from valid token AND finished receiving
-            //TODO: JSON from backend with user data.
             if (!this.state.message) {
                 this.fetchProfile(this.props.state.login.payload.username, this.props.state.login.payload.access_token);
                 return null;

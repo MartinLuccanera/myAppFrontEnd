@@ -5,6 +5,7 @@ import { fetchLogin } from "../actions/index";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import img from '../../resources/images/giphy.gif'
 
 class LoginForm extends Component {
     //We do this constructor thing to initiate the component-level state (not the redux state).
@@ -25,6 +26,7 @@ class LoginForm extends Component {
 
     onInputChange(event) {
         const { name, value } = event.target;
+        console.log('setState');
         this.setState({ [name]: value });
     }
 
@@ -38,7 +40,12 @@ class LoginForm extends Component {
         //Now we attempt to login.
         this.props.fetchLogin(this.state.username, this.state.password);
         //We can empty the password field by
-        this.setState({ password: '' });
+        this.state.password = '';
+        return(
+            <div>
+                <img src={img} />
+            </div>
+        );
     }
 
     render() {

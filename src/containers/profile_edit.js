@@ -4,6 +4,10 @@ import {connect} from "react-redux";
 import {Route, Redirect} from 'react-router';
 import {profileEditAction} from "../actions/profile_edit_action";
 import {bindActionCreators} from "redux";
+import {ENDPOINT_URL} from "./hub";
+import axios from "axios/index";
+import img from '../../resources/images/giphy.gif'
+
 
 export class ProfileEdit extends Component {
 
@@ -11,16 +15,18 @@ export class ProfileEdit extends Component {
         super(props);
         this.handleReLogin = this.handleReLogin.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
-        this.state = {
-            birthdate: this.props.state.profile.data.birthdate,
-            name: this.props.state.profile.data.name,
-            username: this.props.state.profile.data.username,
-            bio: this.props.state.profile.data.bio,
-            email: this.props.state.profile.data.email,
-            needLogin: false}
+        this.submitProfileChanges = this.submitProfileChanges.bind(this);
+        this.state = {};
     }
 
     render() {
+        if (this.state.redirect) {
+            return (
+                <Route exact path="/hub" render={() => (
+                    <Redirect to="/profile-edit"/>
+                )}/>
+            );
+        }
         if (this.state.needRedirect) {
             //If you are not logged in, you are redirected to login page (AKA /).
             return (
@@ -29,8 +35,18 @@ export class ProfileEdit extends Component {
                 )}/>
             );
         }
-        console.log('this.props: ', this.props);
-        if (this.props.state.login && this.props.state.login.payload && this.props.state.login.payload.access_token) {
+        if (this.props.state.login && this.props.state.login.payload &&
+            this.props.state.login.payload.access_token && this.props.state.profile &&
+            this.props.state.profile.data) {
+
+            this.state = {
+                birthdate: this.props.state.profile.data.birthdate,
+                name: this.props.state.profile.data.name,
+                username: this.props.state.profile.data.username,
+                bio: this.props.state.profile.data.bio,
+                email: this.props.state.profile.data.email,
+                needLogin: false
+            };
             return (
                 <div>
                     <MuiThemeProvider>
@@ -54,7 +70,6 @@ export class ProfileEdit extends Component {
                                 className="input-group"
                                 floatingLabelText="username"
                                 value={this.state.username}
-                                onChange={this.onInputChange}
                             /><br/>
                             <TextField
                                 name="bio"
@@ -75,7 +90,16 @@ export class ProfileEdit extends Component {
                                 label="Submit profile changes"
                                 primary={true}
                                 onClick={
-                                    (event) => this.submitProfileChanges(event)
+                                    (event) =>
+                                        this.submitProfileChanges(
+                                            this.props.state.login.payload.username,
+                                            this.props.state.login.payload.access_token,
+                                            this.state.birthdate,
+                                            this.state.name,
+                                            this.state.username,
+                                            this.state.bio,
+                                            this.state.email
+                                        )
                                 }
                             /> <br/>
                         </div>
@@ -116,14 +140,36 @@ export class ProfileEdit extends Component {
     /**
      * <p>Redirect you to edit your profile.</p>
      */
-    submitProfileChanges() {
-        //TODO: perform post to server
-        //this.setState({redirect: true});
+    submitProfileChanges(user, token, birthdate, name, username, bio, email) {
+        console.log("TOKEN", token);
+        const url = `${ENDPOINT_URL}?username=${user}&name=${name}&email=${email}&bio=${bio}&birthdate=${birthdate}`;
+        var data = {
+            username: user,
+            name: name,
+            email: email,
+            bio: bio,
+            birthdate: birthdate
+        };
+        //performs async request for auth data.
+        const request = axios.post(
+            url, data,{
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        ).then((res) => {
+            this.setState({redirect: true});
+        }).catch((err) => {
+            console.log("AXIOS ERROR: ", err);
+        });
+        return(
+            <div>
+                <img src={img} />
+            </div>
+        );
     }
 }
-
-//TODO: Ver como conectar esto con redux y que reciba el state del paso anterior.
-//TODO: OOOO hacer un nuevo get al server y popular con eso.
 /**
  * Redux stuff.
  * @param state
