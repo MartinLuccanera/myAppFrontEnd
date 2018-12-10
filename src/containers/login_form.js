@@ -36,7 +36,7 @@ class LoginForm extends Component {
      */
     onFormSubmit(event) {
         //This is a callback (reason why we have to bind the context above).
-        //Now we attempt to login.
+        //Now we attempt to login. This method is an async call.
         this.props.fetchLogin(this.state.username, this.state.password);
         //We can empty the password field by
         this.state.password = '';

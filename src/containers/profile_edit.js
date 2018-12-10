@@ -37,7 +37,7 @@ export class ProfileEdit extends Component {
                 )}/>
             );
         }
-        if (this.state.needRedirect) {
+        if (this.state.needToLogin) {
             //If you are not logged in, you are redirected to login page (AKA /).
             return (
                 <Route exact path="/profile-edit" render={() => (
@@ -136,23 +136,37 @@ export class ProfileEdit extends Component {
      * <p>If you are not logged in, state is updated and login-redirect-button is shown.</p>
      */
     handleReLogin() {
-        this.setState({needRedirect: true});
+        this.setState({needToLogin: true});
     }
 
     /**
-     * <p>If you are not logged in, state is updated and login-redirect-button is shown.</p>
+     * <p>Cancelled action, return to profile overview.</p>
      */
     handleCancel() {
         this.setState({redirect: true});
     }
 
+    /**
+     * <p> Register every input on designated fields.
+     * This data is stored in state and shown in text fields afterwards.</p>
+     * @param event
+     */
     onInputChange(event) {
         const {name, value} = event.target;
         this.setState({[name]: value});
     }
 
     /**
-     * <p>Redirect you to edit your profile.</p>
+     * <p>Submits profile changes.</p>
+     *
+     * @param user
+     * @param token
+     * @param birthdate
+     * @param name
+     * @param username
+     * @param bio
+     * @param email
+     * @returns {*}
      */
     submitProfileChanges(user, token, birthdate, name, username, bio, email) {
         console.log("TOKEN", token);

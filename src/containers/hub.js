@@ -32,12 +32,12 @@ export class Hub extends Component {
             });
 
             /*
-            By storing this here we are telling redux which data we want to pass along.
-            In this case, we want this data to go to profileEditAction which is an action.
-            Then, this action is fired with a type associated to it. All reducers get this action
-            but only reducer_profile_edit handles it because it catches actions of type EVENT_EDIT_PROFILE.
-            Which in turn, passes the data over to profile_edit via
-            return bindActionCreators({ profileEditAction }, dispatch);
+             * By storing this here we are telling redux which data we want to pass along.
+             * In this case, we want this data to go to profileEditAction which is an action.
+             * Then, this action is fired with a type associated to it. All reducers get this action
+             * but only reducer_profile_edit handles it because it catches actions of type EVENT_EDIT_PROFILE.
+             * Which in turn, passes the data over to profile_edit via
+             * return bindActionCreators({ profileEditAction }, dispatch);
              */
             this.props.profileEditAction({
                 birthdate: this.state.message.data.birthdate,
@@ -68,7 +68,7 @@ export class Hub extends Component {
                 )}/>
             );
         }
-        if (this.state.needRedirect) {
+        if (this.state.needToLogin) {
             //If you are not logged in, you are redirected to login page (AKA /).
             return (
                 <Route exact path="/hub" render={() => (
@@ -76,13 +76,12 @@ export class Hub extends Component {
                 )}/>
             );
         }
-        //TODO: token has to be valid
+        //In case this is an attempt to access the page directly without logging in.
         if (this.props.state.login && this.props.state.login.payload && this.props.state.login.payload.access_token) {
             if (!this.state.message) {
                 this.fetchProfile(this.props.state.login.payload.username, this.props.state.login.payload.access_token);
                 return null;
             }
-            //const items = this.state.message.data.map((d,i) => <li>{d[i].name}</li>);
             return (
                 <div>
                     <MuiThemeProvider>
@@ -156,12 +155,18 @@ export class Hub extends Component {
      * <p>If you are not logged in, state is updated and login-redirect-button is shown.</p>
      */
     handleReLogin() {
-        this.setState({needRedirect: true});
+        this.setState({needToLogin: true});
     }
 
+    /**
+     * Fires async call to fetch user data.
+     *
+     * @param user The owner of profile data.
+     * @param token OAuth token vor validation.
+     */
     fetchProfile(user, token) {
         const url = `${ENDPOINT_URL}?username=${user}`;
-        //performs async request for auth data.
+        //performs async request for user data.
         const request = axios.get(
             url, {
                 headers: {

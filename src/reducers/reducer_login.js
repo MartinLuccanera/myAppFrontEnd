@@ -2,7 +2,7 @@ import { EVENT_LOGIN } from '../actions/index';
 import {EVENT_LOGGED_IN} from "../actions";
 
 /**
- * <p>Assemble the response from the authentication server into a JSON containing the payload (a promise) and the username
+ * <p>Assemble the response from the authentication server into a JSON containing the payload and the username
  * that requested the authentication.</p>
  *
  * @param state
@@ -13,7 +13,7 @@ export default function(state = null, action) {
     switch (action.type) {
         //Login attempt.
         case EVENT_LOGIN:
-            return {
+            return { //This payload is a promise!!!
                 payload: action.payload,
                 username: action.username,
             };

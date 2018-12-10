@@ -36,6 +36,7 @@ export class LoginList extends Component {
             });
         }).catch(result => {
             this.message = 'Failed to login';
+            console.log(result);
             //If I set state to something else, the component will re-render and the app will loop out of control.
         });
     }

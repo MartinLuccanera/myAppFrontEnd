@@ -1,8 +1,7 @@
 import {EVENT_EDIT_PROFILE} from "../actions/index";
 
 /**
- * <p>Assemble the response from the authentication server into a JSON containing the payload (a promise) and the username
- * that requested the authentication.</p>
+ * <p>Receives the data from the profile fetch call..</p>
  *
  * @param state
  * @param action

@@ -1,7 +1,7 @@
 import {EVENT_EDIT_PROFILE} from "./index";
 
 /**
- * <p>Dispatches action of type {@link EVENT_LOGGED_IN} meaning user has completed the process of logging in.</p>
+ * <p>Dispatches action of type {@link EVENT_EDIT_PROFILE} meaning the user wants to edit it's profile.</p>
  *
  * @param state
  * @returns {{type, payload: *}}
