@@ -1,7 +1,7 @@
 {
-  "name": "redux-simple-starter",
+  "name": "MyAppFrontEnd",
   "version": "1.0.0",
-  "description": "FrontEnd of MyApp. Calls authentication endpoint and requests some data.",
+  "description": "FrontEnd of MyApp. Calls authentication endpoint and requests and posts some data.",
   "main": "index.js",
   "repository": "git@github.com:MartinLuccanera/myAppFrontEnd.git",
   "scripts": {
@@ -10,7 +10,7 @@
     "test:watch": "npm run test -- --watch",
     "build": "webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors"
   },
-  "author": "",
+  "author": "Martin Luccanera",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.2.1",
