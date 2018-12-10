@@ -6,8 +6,7 @@ import {profileEditAction} from "../actions/profile_edit_action";
 import {bindActionCreators} from "redux";
 import {ENDPOINT_URL} from "./hub";
 import axios from "axios/index";
-import img from '../../resources/images/giphy.gif'
-
+import img from '../../resources/images/giphy.gif';
 
 export class ProfileEdit extends Component {
 
@@ -16,14 +15,25 @@ export class ProfileEdit extends Component {
         this.handleReLogin = this.handleReLogin.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
         this.submitProfileChanges = this.submitProfileChanges.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
         this.state = {};
+        if (this.props.state.profile && this.props.state.profile.data) {
+            this.state = {
+                birthdate: this.props.state.profile.data.birthdate,
+                name: this.props.state.profile.data.name,
+                username: this.props.state.profile.data.username,
+                bio: this.props.state.profile.data.bio,
+                email: this.props.state.profile.data.email,
+                needLogin: false
+            };
+        }
     }
 
     render() {
         if (this.state.redirect) {
             return (
-                <Route exact path="/hub" render={() => (
-                    <Redirect to="/profile-edit"/>
+                <Route exact path="/profile-edit" render={() => (
+                    <Redirect to="/hub"/>
                 )}/>
             );
         }
@@ -36,21 +46,12 @@ export class ProfileEdit extends Component {
             );
         }
         if (this.props.state.login && this.props.state.login.payload &&
-            this.props.state.login.payload.access_token && this.props.state.profile &&
-            this.props.state.profile.data) {
-
-            this.state = {
-                birthdate: this.props.state.profile.data.birthdate,
-                name: this.props.state.profile.data.name,
-                username: this.props.state.profile.data.username,
-                bio: this.props.state.profile.data.bio,
-                email: this.props.state.profile.data.email,
-                needLogin: false
-            };
+            this.props.state.login.payload.access_token && this.props.state.profile) {
             return (
                 <div>
                     <MuiThemeProvider>
                         <div>
+                            <h3>Edit your profile</h3>
                             <TextField
                                 name="birthdate"
                                 className="input-group"
@@ -101,7 +102,13 @@ export class ProfileEdit extends Component {
                                             this.state.email
                                         )
                                 }
-                            /> <br/>
+                            />
+                            <RaisedButton
+                                className="raised-cancel-button"
+                                label="Cancel"
+                                primary={false}
+                                onClick={this.handleCancel}
+                            />
                         </div>
                     </MuiThemeProvider>
                 </div>
@@ -132,6 +139,13 @@ export class ProfileEdit extends Component {
         this.setState({needRedirect: true});
     }
 
+    /**
+     * <p>If you are not logged in, state is updated and login-redirect-button is shown.</p>
+     */
+    handleCancel() {
+        this.setState({redirect: true});
+    }
+
     onInputChange(event) {
         const {name, value} = event.target;
         this.setState({[name]: value});
@@ -152,7 +166,7 @@ export class ProfileEdit extends Component {
         };
         //performs async request for auth data.
         const request = axios.post(
-            url, data,{
+            url, data, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
@@ -163,13 +177,14 @@ export class ProfileEdit extends Component {
         }).catch((err) => {
             console.log("AXIOS ERROR: ", err);
         });
-        return(
+        return (
             <div>
-                <img src={img} />
+                <img src={img}/>
             </div>
         );
     }
 }
+
 /**
  * Redux stuff.
  * @param state
@@ -183,7 +198,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ profileEditAction }, dispatch);
+    return bindActionCreators({profileEditAction}, dispatch);
 }
 
 //We are exporting the connected version of LoginList (for state's sake).

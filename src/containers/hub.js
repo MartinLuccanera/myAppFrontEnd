@@ -49,9 +49,9 @@ export class Hub extends Component {
         }).catch(result => {
             //If I set state to something else, the component will re-render and the app will loop out of control.
         });
-        return(
+        return (
             <div>
-                <img src={img} />
+                <img src={img}/>
             </div>
         );
     }
@@ -87,6 +87,7 @@ export class Hub extends Component {
                 <div>
                     <MuiThemeProvider>
                         <div>
+                            <h3>Profile overview</h3>
                             <TextField
                                 name="id"
                                 floatingLabelText="Date of birth"
